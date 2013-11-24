@@ -1,0 +1,252 @@
+﻿@{
+    ViewBag.Title = "KendoGrid con MVC";
+}
+
+<div class="demo-section" style="text-align:center;">
+    <h2>Demo1</h2>
+    <div class="completenessLevel">
+        <div id="profileCompleteness"></div>
+    </div>
+</div>
+
+<h2>@ViewBag.Title</h2>
+
+<style>
+    .k-grid-content
+    {
+        min-height:390px;
+    }
+</style>
+<div id="grid"></div>
+
+@section scripts
+{   
+    
+    
+    <script src="~/Scripts/kendo/2013.3.1119/kendo.web.min.js"></script>    
+    <script src="~/Scripts/kendo/lang/kendo.es-ES.js"></script>
+    <script>
+        $(document).ready(function () {
+            setProgressDemo(2);
+
+           /* var modelPersona = kendo.data.Model.define({
+                id : "Id",
+                fields: {
+                      Id            : { type: "number", editable: false, nullable: true }
+                    , Nombre        : { type: "string", validation: { required: true },  }
+                    , Apellido      : { type: "string", validation: { required: true },  }
+                    , Edad          : { type: "number", validation: { required: true },  }
+                    , Nacionalidad  : { type: "string", validation: { required: true },  }
+                    , Profesion     : { type: "string", validation: { required: true },  }
+                },
+            });
+            var urlCrud = "~/odata/Persona";
+            var ds = kendo.data.DataSource({
+                type: "odata",
+                transport: {
+                      create: { url: urlCrud }
+                    , read: { url: urlCrud }
+                    , update: { url: urlCrud }
+                    , destroy: { url: urlCrud }
+                    //, parameterMap: function(options, operation) {
+                    //    if (operation !== "read" && options.models) {
+                    //        return {models: kendo.stringify(options.models)};
+                    //    }
+                    //}
+                },
+                schema: {
+                    type: 'json',
+                    //data: function (data) {
+                    //    if (data["Items"] !== undefined) {
+                    //        return data["Items"]; //read array de datos
+                    //    } else {
+                    //        return data; //resto de acciones
+                    //    }
+                    //},
+                    //total: function (data) {
+                    //    var r = parseInt(data["TotalCount"]);
+                    //    return r;
+                    //},
+                    model: {
+                        id : "Id",
+                        fields: {
+                            Id: { type: "number", editable: false, nullable: true }
+                            , Nombre: { type: "string", validation: { required: true }, }
+                            , Apellido: { type: "string", validation: { required: true }, }
+                            , Edad: { type: "number", validation: { required: true }, }
+                            , Nacionalidad: { type: "string", validation: { required: true }, }
+                            , Profesion: { type: "string", validation: { required: true }, }
+                        }
+                    }
+                },                                    
+            });
+            var grid = $("#grid").kendoGrid({
+                dataSource : ds,
+                columns: [
+                    { field: "Nombre"   , title: "Nombre"    },
+                    { field: "Nombre"   , title: "Nombre"    },
+                    { field: "Apellido" , title: "Apellido"  },
+                    { field: "Edad"     , title: "Edad"      },
+                    { field: "Nacionalidad", title: "Nacionalidad" },
+                    { field: "Profesion", title: "Profesion" },
+                    { command: [ "edit", "destroy"] },
+                ],
+            });
+            */
+            
+            var modelPersona = kendo.data.Model.define({
+                id: "Id",
+                fields: {
+                    Id: { type: "number", editable: false, nullable: false }
+                         , Nombre: { type: "string", validation: { required: true }, }
+                         , Apellido: { type: "string", validation: { required: true }, }
+                         , Edad: { type: "number", validation: { required: true }, }
+                         , Nacionalidad: { type: "string", validation: { required: true }, }
+                         , Profesion: { type: "string", validation: { required: false }, }
+                },
+            });
+            
+            var crudServiceBaseUrl = "/odata/Persona",
+                        dataSource = new kendo.data.DataSource({
+                            type: "odata",
+                            transport: {
+                                read: {
+                                    url: crudServiceBaseUrl ,
+                                    dataType: "json"
+                                },                                
+                                create: {
+                                    url: crudServiceBaseUrl,
+                                    dataType: "json"
+                                },
+
+                                update: {
+                                    url: function (data) {
+                                        return crudServiceBaseUrl + "(" + data.Id + ")";
+                                    },
+                                    dataType: "json"
+                                },
+                                destroy: {
+                                    url: function (data) {
+                                        return crudServiceBaseUrl + "(" + data.Id + ")";
+                                    },
+                                    dataType: "json"
+                                }
+                               
+                            },
+                            batch: false,
+                            pageSize: 10,
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true,
+                            schema: {
+                                model : modelPersona,
+                                //model: {
+                                //    id: "Id",                                    
+                                //   fields: {
+                                //              Id            : { type: "number", editable: false, nullable: false }
+                                //            , Nombre        : { type: "string", validation: { required: true },  }
+                                //            , Apellido      : { type: "string", validation: { required: true },  }
+                                //            , Edad          : { type: "number", validation: { required: true },  }
+                                //            , Nacionalidad  : { type: "string", validation: { required: true },  }
+                                //            , Profesion     : { type: "string", validation: { required: false },  }
+                                //        },                                        
+                                //},
+                                data: function (data) {
+                                    return data["value"];
+                                },
+                                total: function (data) {
+                                    return data["odata.count"];
+                                },
+                            },
+                            error: function (e) {
+                                var responseJson = e.xhr.responseJSON;
+                                if (responseJson != undefined) {
+                                    if (responseJson["odata.error"] != undefined) {
+                                        var error = responseJson["odata.error"];
+                                        var message = error.message.value + '\n\n' + error.innererror.message;
+                                        alert(message);
+                                    }
+                                } else {
+                                    alert(e.xhr.status + "\n\n" + e.xhr.responseText + "\n\n" + e.xhr.statusText);
+                                }
+                                this.read();
+                            }
+                           
+                        });
+
+            $("#grid").kendoGrid({
+                dataSource: dataSource,
+                filterable: true,
+                sortable: true,
+                pageable: true,                
+                toolbar: ["create"],
+                columns: [
+                    { field: "Id", title: "Id"},
+                    { field: "Nombre", title: "Nombre" },                    
+                    { field: "Apellido", title: "Apellido" },
+                    { field: "Edad", title: "Edad", format: "{0:n0}" },
+                    { field: "Nacionalidad", title: "Nacionalidad" },
+                    { field: "Profesion", title: "Profesion" },
+
+                    { command: ["edit", "destroy"], width: "200px" }
+                ],
+                editable: "popup"                
+            });
+            
+
+            //var dataSource = new kendo.data.DataSource({
+            //    type: "odata",
+            //    transport: {
+            //        read: {
+            //            url: "/odata/Persona",
+            //            dataType: "json"
+            //        },
+            //    },
+            //    schema: {
+            //        data: function (data) {
+            //            return data["value"];
+            //        },
+            //        total: function (data) {
+            //            return data["odata.count"];
+            //        },
+            //        model: {
+            //            fields: {
+            //                Id: { type: "number" },
+            //                Nombre: { type: "string" },                            
+            //            }
+            //        }
+            //    },
+            //    pageSize: 10,
+            //    serverPaging: true,
+            //    serverFiltering: true,
+            //    serverSorting: true
+            //});
+
+            ////$("#grid").kendoGrid({
+            ////    dataSource: dataSource,
+            ////    filterable: true,
+            ////    sortable: true,
+            ////    pageable: true,
+            ////    columns: [
+            ////        { field: "Id" },
+            ////        { field: "Nombre" },                    
+            ////    ]
+            ////});
+            //$("#grid").kendoGrid({
+            //    dataSource: dataSource,
+            //    filterable: true,
+            //    sortable: true,
+            //    pageable: true,
+            //    toolbar: ["create"],
+            //    columns: [
+            //        { field: "Id", title: "Id" },
+            //        { field: "Nombre", title: "Nombre" },
+            //        { command: ["edit", "destroy"], title: "&nbsp;", width: "160px" }
+            //    ]
+            //    , editable: "popup"
+            //});
+
+        });
+    </script>
+
+}
