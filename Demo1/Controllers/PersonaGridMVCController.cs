@@ -30,40 +30,37 @@ namespace Demo1.Controllers
         public JsonResult GetGridData()
         {
             var kendoRequest = new KendoGridQueryModel();
-            
-            var query = db.Personas.AsQueryable();
-            //var rto = ReturnDataPaginationOrderToMaping<Persona>(pagination, query);
-            //var rto  = KendoUiHelper.
-            //return rto;
-            var gridData = KendoUiHelper.ReturnGridData<Persona>(kendoRequest, ref query);
-            //var gridData = _observationDao.GetGridData(pagging);
-
+            var query = db.Personas.AsQueryable();            
+            var gridData = KendoUiHelper.ReturnGridData<Persona>(kendoRequest, query);
             return Json(gridData, JsonRequestBehavior.AllowGet);
         }
 
-        
+        [HttpPost]
+        public JsonResult Create(Persona dto)
+        {
+            var dtoNew = db.Personas.Add(dto);
+            db.SaveChanges();
+            dto.Id = dtoNew.Id;
+            return Json(dto);
+        }
 
-        //[HttpPost]
-        //public JsonResult Create(Persona dto)
-        //{
-        //    var dtoNew = _observationDao.Create(dto);
-        //    dto.Id = dtoNew.Id;
-        //    return Json(dto);
-        //}
+        [HttpPut]
+        public JsonResult Update(Persona dto)
+        {
+            var data = db.Personas.Attach(dto);
+            db.Entry(data).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(data);
+        }
 
-        //[HttpPut]
-        //public JsonResult Update(Persona dto)
-        //{
-        //    var data = _observationDao.Update(dto);
-        //    return Json(data);
-        //}
-
-        //[HttpDelete]
-        //public JsonResult Delete(Persona dto)
-        //{
-        //    var data = _observationDao.Delete(dto.Id);
-        //    return Json(data);
-        //}
+        [HttpDelete]
+        public JsonResult Delete(Persona dto)
+        {
+            var data = db.Personas.Attach(dto);
+            db.Personas.Remove(data);
+            db.SaveChanges();
+            return Json(data);
+        }
 
     }
 }
