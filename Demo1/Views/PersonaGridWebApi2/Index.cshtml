@@ -100,7 +100,11 @@
                 dataSource: dataSource,
                 filterable: true,
                 sortable: true,
-                pageable: true,                
+                pageable: {
+                    refresh: true,
+                    pageSizes: true,
+                    buttonCount: 5,
+                },
                 toolbar: ["create"],
                 columns: [
                     { field: "Id", title: "Id"},

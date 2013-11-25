@@ -1,0 +1,163 @@
+﻿@{
+    ViewBag.Title = "Kendo ListView y algo más";
+}
+
+<div class="demo-section" style="text-align:center;">
+    <h2>Demo 3</h2>
+    <div class="completenessLevel">        
+        <div id="profileCompleteness"></div>
+    </div>
+</div>
+
+<h2>@ViewBag.Title</h2>
+
+<style>
+    .demo-section {
+        padding: 10px;
+        width: 750px;
+    }
+    #listView {
+        padding: 30px;
+        margin-bottom: -1px;
+        min-width: 555px;
+        min-height: 310px;
+    }
+    .person {
+        float: left;
+        position: relative;
+        width: 111px;
+        height: 170px;
+        margin: 5px;
+        padding: 0;
+    }
+    .person img {
+        /*width: 110px;*/
+        height: 110px;
+    }
+    .person h3 {
+        margin: 0;
+        padding: 3px 5px 0 0;        
+        font-size: .9em;        
+    }
+    .person p
+    {
+        font-size:.8em;
+    }
+    .k-listview:after {
+        content: ".";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
+</style>
+
+<div class="demo-section">
+    <div id="listView"></div>
+    <div id="pager" class="k-pager-wrap"></div>
+</div>
+
+@section scripts
+{   
+    <script type="text/x-kendo-template" id="template">
+        <div class="person">            
+            
+            <img src="../Content/Images/#=Math.floor(Math.random() * 31) + 1#.jpg" />
+            <h3>#:Apellido + ', ' + Nombre#</h3>
+            <p>#:kendo.toString(Edad, "n0")# años - #:Profesion#</p>            
+        </div>
+    </script>
+    
+    <script src="~/Scripts/kendo/2013.3.1119/kendo.web.min.js"></script>    
+    <script src="~/Scripts/kendo/lang/kendo.es-ES.js"></script>
+    <script>
+        $(document).ready(function () {
+            setProgressDemo(3);
+
+            //Modelo Kendo
+            var modelPersona = kendo.data.Model.define({
+                id: "Id",
+                fields: {
+                           Id: { type: "number", editable: false, nullable: false }
+                         , Nombre: { type: "string", validation: { required: true }, }
+                         , Apellido: { type: "string", validation: { required: true }, }
+                         , Edad: { type: "number", validation: { required: true }, }
+                         , Nacionalidad: { type: "string", validation: { required: true }, }
+                         , Profesion: { type: "string", validation: { required: false }, }
+                },
+            });
+            
+            //Configurando KendoDataSource
+            var crudServiceBaseUrl = "/odata/Persona";
+            var dataSource = new kendo.data.DataSource({
+                type: "odata",
+                transport: {
+                    read: {
+                        url: crudServiceBaseUrl ,
+                        dataType: "json"
+                    },                                
+                    create: {
+                        url: crudServiceBaseUrl,
+                        dataType: "json"
+                    },
+                    update: {
+                        url: function (data) {
+                            return crudServiceBaseUrl + "(" + data.Id + ")";
+                        },
+                        dataType: "json"
+                    },
+                    destroy: {
+                        url: function (data) {
+                            return crudServiceBaseUrl + "(" + data.Id + ")";
+                        },
+                        dataType: "json"
+                    }
+                },
+                batch: false,
+                pageSize: 10,
+                serverPaging: true,
+                serverFiltering: true,
+                serverSorting: true,
+                schema: {
+                    model: modelPersona,
+                    data: function (data) {
+                        return data["value"];
+                    },
+                    total: function (data) {
+                        return data["odata.count"];
+                    },
+                },
+                error: function (e) {
+                    var responseJson = e.xhr.responseJSON;
+                    if (responseJson != undefined) {
+                        if (responseJson["odata.error"] != undefined) {
+                            var error = responseJson["odata.error"];
+                            var message = error.message.value + '\n\n' + error.innererror.message;
+                            alert(message);
+                        }
+                    } else {
+                        alert(e.xhr.status + "\n\n" + e.xhr.responseText + "\n\n" + e.xhr.statusText);
+                    }
+                    this.read();
+                }
+                           
+            });
+
+
+            //Creando KendoWidgets
+            $("#pager").kendoPager({
+                dataSource: dataSource,                
+                refresh: true,
+                pageSizes: true,
+                buttonCount: 2,                
+            });
+            $("#listView").kendoListView({
+                dataSource: dataSource,
+                template: kendo.template($("#template").html())
+            });
+           
+
+        });
+    </script>
+
+}

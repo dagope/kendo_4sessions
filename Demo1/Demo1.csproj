@@ -204,6 +204,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PersonaController.cs" />
     <Compile Include="Controllers\PersonaGridMVCController.cs" />
+    <Compile Include="Controllers\PersonaListViewAndMoreController.cs" />
     <Compile Include="Controllers\PersonaGridWebApi2Controller.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -228,6 +229,37 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\1.jpg" />
+    <Content Include="Content\Images\10.jpg" />
+    <Content Include="Content\Images\11.jpg" />
+    <Content Include="Content\Images\12.jpg" />
+    <Content Include="Content\Images\13.jpg" />
+    <Content Include="Content\Images\14.jpg" />
+    <Content Include="Content\Images\15.jpg" />
+    <Content Include="Content\Images\16.jpg" />
+    <Content Include="Content\Images\17.jpg" />
+    <Content Include="Content\Images\18.jpg" />
+    <Content Include="Content\Images\19.jpg" />
+    <Content Include="Content\Images\2.jpg" />
+    <Content Include="Content\Images\20.jpg" />
+    <Content Include="Content\Images\21.jpg" />
+    <Content Include="Content\Images\22.jpg" />
+    <Content Include="Content\Images\23.jpg" />
+    <Content Include="Content\Images\24.jpg" />
+    <Content Include="Content\Images\25.jpg" />
+    <Content Include="Content\Images\26.jpg" />
+    <Content Include="Content\Images\27.jpg" />
+    <Content Include="Content\Images\28.jpg" />
+    <Content Include="Content\Images\29.jpg" />
+    <Content Include="Content\Images\3.jpg" />
+    <Content Include="Content\Images\30.jpg" />
+    <Content Include="Content\Images\31.jpg" />
+    <Content Include="Content\Images\4.jpg" />
+    <Content Include="Content\Images\5.jpg" />
+    <Content Include="Content\Images\6.jpg" />
+    <Content Include="Content\Images\7.jpg" />
+    <Content Include="Content\Images\8.jpg" />
+    <Content Include="Content\Images\9.jpg" />
     <Content Include="Content\kendo\2013.3.1119\Black\editor.png" />
     <Content Include="Content\kendo\2013.3.1119\Black\imagebrowser.png" />
     <Content Include="Content\kendo\2013.3.1119\Black\indeterminate.gif" />
@@ -1259,6 +1291,7 @@
     <Content Include="Scripts\kendo\2013.3.1119\cultures\kendo.culture.af-ZA.min.js.map" />
     <Content Include="Scripts\kendo\2013.3.1119\cultures\kendo.culture.af.min.js.map" />
     <Content Include="Views\PersonaGridMVC\Index.cshtml" />
+    <Content Include="Views\PersonaListViewAndMore\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo1.Extensions\Demo1.Extensions.csproj">
@@ -1270,6 +1303,7 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

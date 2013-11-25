@@ -2,9 +2,9 @@
 function setProgressDemo(value) {
     var pb = $("#profileCompleteness").kendoProgressBar({
         type: "chunk",
-        chunkCount: 5,
+        chunkCount: 3,
         min: 0,
-        max: 5,
+        max: 3,
         value: value
     }).data("kendoProgressBar");
 }
