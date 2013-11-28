@@ -418,3 +418,4 @@
 /// <reference path="kendo/2013.3.1119/cultures/kendo.culture.zh.js" />
 /// <reference path="kendo/2013.3.1119/cultures/kendo.culture.zu-za.js" />
 /// <reference path="kendo/2013.3.1119/cultures/kendo.culture.zu.js" />
+/// <reference path="kendo/kendo.2013.3.1119.all.js" />

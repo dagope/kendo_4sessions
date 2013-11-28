@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Kendo DataViz";
+}
+
+<div class="demo-section" style="text-align:center;">
+    <h2>Demo extra</h2>
+    <div class="completenessLevel">        
+        <div id="profileCompleteness"></div>
+    </div>
+</div>
+
+<h2>@ViewBag.Title</h2>
+
+
+<div class="chart-wrapper">
+    <div id="chartDonuts"></div>
+</div>
+
+@section scripts
+{   
+    <script src="~/Scripts/kendo/kendo.2013.3.1119.all.min.js"></script>    
+    <script>
+        $(document).ready(function () {
+            setProgressDemo(4);
+
+
+            
+            $("#chartDonuts").kendoChart({
+                title: {
+                    position: "top",
+                    text: "Estadística de profesiones"
+                },
+                legend: {
+                    position: "left",
+                    visible: true
+                },                
+                seriesDefaults: {
+                    labels: {
+                        visible: true,
+                        background: "transparent",                        
+                        template: "#= category =='' ? 'sin trabajo' : category #: #= value#%",
+                    }, 
+                    tooltip: {
+                        visible: true,
+                        template: "#= category #: #= value#%"
+                    }
+                },
+                dataSource: {
+                    type: "json",
+                    transport: {
+                        read: {
+                            url: '/PersonaListViewAndMore/JsonDataChart',
+                            type: "GET",
+                            dataType: "json",
+                            contentType: "application/json; charset=utf-8"
+                        },
+                    }
+                },
+                serieqs: [{
+                    type: "pie",
+                    startAngle: 190,
+                    field: "Porcentaje",
+                    categoryField: "Profesion"
+                }],                
+                tooltip: {
+                    visible: true,
+                    format: "{0}%"
+                }
+            });
+
+        });
+
+
+        
+    
+        
+    </script>
+
+}

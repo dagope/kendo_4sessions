@@ -8,4 +8,3 @@ function setProgressDemo(value) {
         value: value
     }).data("kendoProgressBar");
 }
-

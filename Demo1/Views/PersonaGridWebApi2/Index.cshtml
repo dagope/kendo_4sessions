@@ -32,19 +32,19 @@
             var modelPersona = kendo.data.Model.define({
                 id: "Id",
                 fields: {
-                    Id: { type: "number", editable: false, nullable: false }
-                         , Nombre: { type: "string", validation: { required: true }, }
-                         , Apellido: { type: "string", validation: { required: true }, }
-                         , Edad: { type: "number", validation: { required: true }, }
+                           Id:           { type: "number", editable: false, nullable: false }
+                         , Nombre:       { type: "string", validation: { required: true }, }
+                         , Apellido:     { type: "string", validation: { required: true }, }
+                         , Edad:         { type: "number", validation: { required: true }, }
                          , Nacionalidad: { type: "string", validation: { required: true }, }
-                         , Profesion: { type: "string", validation: { required: false }, }
+                         , Profesion:    { type: "string", validation: { required: false }, }
                 },
             });
             
             var crudServiceBaseUrl = "/odata/Persona";
             var dataSource = new kendo.data.DataSource({
                 type: "odata",
-                transport: {
+                transport: {                    
                     read: {
                         url: crudServiceBaseUrl ,
                         dataType: "json"
@@ -64,7 +64,7 @@
                             return crudServiceBaseUrl + "(" + data.Id + ")";
                         },
                         dataType: "json"
-                    }
+                    },                    
                 },
                 batch: false,
                 pageSize: 10,
@@ -73,8 +73,14 @@
                 serverSorting: true,
                 schema: {
                     model: modelPersona,
-                    data: function (data) {
-                        return data["value"];
+                    data: function (data) {                        
+                        if (data["value"])
+                            return data["value"];
+                        else
+                        {
+                            delete data["odata.metadata"]; 
+                            return data;
+                        }   
                     },
                     total: function (data) {
                         return data["odata.count"];
@@ -114,9 +120,9 @@
                     { field: "Nacionalidad", title: "Nacionalidad" },
                     { field: "Profesion", title: "Profesion" },
 
-                    { command: ["edit", "destroy"], width: "200px" }
+                    { command: ["edit", "destroy"], width: "180px" }
                 ],
-                editable: "inline"                
+                editable: "popup"                
             });
             
 

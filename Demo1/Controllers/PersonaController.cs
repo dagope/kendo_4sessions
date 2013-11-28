@@ -125,10 +125,6 @@ namespace Demo1.Controllers
         }
 
 
-        ///Odata Persona view
-        public ActionResult Grid()
-        {
-            return View();
-        }
+        
     }
 }
